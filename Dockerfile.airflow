@@ -1,0 +1,18 @@
+# Start with the official Airflow image
+FROM apache/airflow:2.5.0
+
+# Set environment variables for Airflow
+ENV AIRFLOW_HOME=/opt/airflow
+
+# Install additional dependencies if needed (e.g., Chroma, other packages)
+
+
+# Optionally, copy your custom DAGs or other configurations
+COPY ./ /opt/airflow/
+RUN python -m pip install --upgrade pip
+RUN pip install -r requirements.txt
+# Copy the initialization script into the container
+# COPY ./init_airflow.sh /opt/airflow/init_airflow.sh
+
+# # Ensure the script is executable
+# RUN chmod +x /opt/airflow/init_airflow.sh

@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  airflow-webserver:
+    # image: apache/airflow:2.5.0
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor  # Use LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Point to PostgreSQL
+      - AIRFLOW__WEBSERVER__WORKERS=1
+      - AIRFLOW__WEBSERVER__RBAC=True
+    volumes:
+      - ./:/opt/airflow/
+      # - ./dags:/opt/airflow/dags
+      # - ./init_airflow.sh:/opt/airflow/init_airflow.sh
+    ports:
+      - "8080:8080"
+    depends_on:
+      - airflow-db  # Wait for PostgreSQL
+    entrypoint: ["bash", "/opt/airflow/init_airflow.sh", "webserver"]
+    restart: always
+
+  airflow-scheduler:
+    # image: apache/airflow:2.5.0
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor  # Use LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Point to PostgreSQL
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./init_airflow.sh:/opt/airflow/init_airflow.sh
+    depends_on:
+      - airflow-db  # Wait for PostgreSQL
+    entrypoint: ["bash", "/opt/airflow/init_airflow.sh", "scheduler"]
+    restart: always
+
+  airflow-db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    volumes:
+      - airflow-db-data:/var/lib/postgresql/data
+    restart: always
+
+  chroma-db:
+    build:
+      context: .
+      dockerfile: Dockerfile.chroma
+    volumes:
+      - ./data/embeddings:/embeddings
+
+volumes:
+  airflow-db-data:
