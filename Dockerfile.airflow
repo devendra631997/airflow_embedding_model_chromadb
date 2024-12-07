@@ -9,8 +9,19 @@ ENV AIRFLOW_HOME=/opt/airflow
 
 # Optionally, copy your custom DAGs or other configurations
 COPY ./ /opt/airflow/
+
+USER root
+
+# Update apt and install necessary system dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    build-essential \
+    python3-dev
+USER airflow
 RUN python -m pip install --upgrade pip
 RUN pip install -r requirements.txt
+RUN pip install transformers torch
+
 # Copy the initialization script into the container
 # COPY ./init_airflow.sh /opt/airflow/init_airflow.sh
 

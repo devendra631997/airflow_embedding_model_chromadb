@@ -20,7 +20,7 @@ services:
     depends_on:
       - airflow-db  # Wait for PostgreSQL
     entrypoint: ["bash", "/opt/airflow/init_airflow.sh", "webserver"]
-    restart: always
+    # restart: always
 
   airflow-scheduler:
     # image: apache/airflow:2.5.0
@@ -31,12 +31,12 @@ services:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor  # Use LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Point to PostgreSQL
     volumes:
-      - ./dags:/opt/airflow/dags
-      - ./init_airflow.sh:/opt/airflow/init_airflow.sh
+      - ./:/opt/airflow/
+
     depends_on:
       - airflow-db  # Wait for PostgreSQL
     entrypoint: ["bash", "/opt/airflow/init_airflow.sh", "scheduler"]
-    restart: always
+    # restart: always
 
   airflow-db:
     image: postgres:13
@@ -46,7 +46,7 @@ services:
       - POSTGRES_DB=airflow
     volumes:
       - airflow-db-data:/var/lib/postgresql/data
-    restart: always
+    # restart: always
 
   chroma-db:
     build:

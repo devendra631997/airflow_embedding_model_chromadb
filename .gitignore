@@ -1,0 +1,5 @@
+/fpp-venv/
+/airflow.cfg
+/logs/
+/.idea/
+/data/input_files/process_files.py.log

@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export PYTHONPATH="${PYTHONPATH}:./"
 # Initialize the Airflow database
 echo "Initializing Airflow database..."
 airflow db init
