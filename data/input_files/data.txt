@@ -1,0 +1,2 @@
+Hello, how are you ? BERT is a powerful model for NLP.
+i am here.
