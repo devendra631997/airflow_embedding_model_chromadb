@@ -1,14 +1,6 @@
 from transformers import BertTokenizer, BertModel
 import torch
 
-
-# def generate_embeddings_from_text(file_path):
-#     with open(file_path, 'r') as f:
-#         text = f.read()
-#     embeddings = model.encode([text])
-#     return embeddings
-
-
 def get_bert_embeddings(texts, model_name='bert-base-uncased'):
     tokenizer = BertTokenizer.from_pretrained(model_name)
     model = BertModel.from_pretrained(model_name)

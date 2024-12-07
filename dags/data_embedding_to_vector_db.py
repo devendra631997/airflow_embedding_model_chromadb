@@ -13,7 +13,7 @@ dag = DAG(
     default_args=default_args,
 )
 
-def dag_test():
+def dag_job():
     texts = ["Hello, how are you?", "BERT is a powerful model for NLP."]
     embeddings = get_bert_embeddings(texts)
     print(f"Embedding for sentence {embeddings}")
@@ -21,7 +21,7 @@ def dag_test():
 
 # Airflow task to detect new files and process them
 detect_files_task = PythonOperator(
-    task_id='detect_new_files',
-    python_callable=dag_test,
+    task_id='file_to_vector_chroma_db',
+    python_callable=dag_job,
     dag=dag,
 )
