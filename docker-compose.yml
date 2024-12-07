@@ -49,11 +49,24 @@ services:
     # restart: always
 
   chroma-db:
-    build:
-      context: .
-      dockerfile: Dockerfile.chroma
+    image: ghcr.io/chroma-core/chroma:latest
+    container_name: chromadb
+    ports:
+      - "8000:8000"  # Exposes Chroma's API on port 8000
+    environment:
+      - CHROMA_SETTINGS=chromadb.config.Settings
+      - CHROMA_DB_URI=sqlite:///./chroma.db  # You can adjust this for other backends (e.g., Postgres, Redis)
     volumes:
-      - ./data/embeddings:/embeddings
+      - ./data/embeddings:/embeddings  # Persistent volume for data storage
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.chroma
+#    volumes:
+#      - ./data/embeddings:/embeddings
 
 volumes:
   airflow-db-data:
+    driver: local
+  chromadb_data:
+    driver: local
+
