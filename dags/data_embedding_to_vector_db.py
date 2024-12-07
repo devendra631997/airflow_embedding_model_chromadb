@@ -5,7 +5,7 @@ from embedding_model.bert_model import get_bert_embeddings
 from scripts.store_embeddings_in_chromadb import store_embeddings_in_chroma
 default_args = {
     'owner': 'airflow',
-    'start_date': datetime(2023, 12, 9),
+    'start_date': datetime(2024, 12, 9),
 }
 
 dag = DAG(
